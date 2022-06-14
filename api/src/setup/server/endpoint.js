@@ -8,7 +8,7 @@ import modules from './modules'
 export default function (server) {
   console.info('SETUP - Endpoint..')
 
-  // API endpoint
+  // API oauth endpoint
   server.all(
     params.common.endpoint.url,
     [authentication],
@@ -59,5 +59,8 @@ export default function (server) {
       // Send response
       response.send(result)
     },
-  )
+  );
+
+  // TODO: API another endpoints
+  // server.get(lana.hampicke@gmail.com
 }

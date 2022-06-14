@@ -35,7 +35,8 @@ const Header = () => {
 
         {user && (
           <>
-            <NavLink to={routes.noteList.path}>Notes</NavLink>
+            <NavLink to={routes.mailList.path}>Mails</NavLink>
+            {/* <NavLink to={routes.noteList.path}>Notes</NavLink> */}
             <NavLink to={routes.userProfile.path}>Profile</NavLink>
           </>
         )}

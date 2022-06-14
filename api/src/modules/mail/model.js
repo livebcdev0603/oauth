@@ -1,32 +1,23 @@
 // Imports
 import mongoose, { Schema } from 'mongoose'
 
+// App imports
+import { collection as User } from 'modules/user/model'
+
 // Collection name
-export const collection = 'User'
+export const collection = 'Mails'
 
 // Schema
 const schema = new Schema(
   {
-    email: {
-      type: String,
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: User,
       required: true,
-      unique: true,
       index: true,
     },
 
-    // // TODO: create new password
-    // password: {
-    //   type: String,
-    //   required: true,
-    // },
-
-    name: {
-      type: String,
-      required: true,
-    },
-
-    // add oauth token
-    token: {
+    data: {
       type: Object,
       required: true,
     },

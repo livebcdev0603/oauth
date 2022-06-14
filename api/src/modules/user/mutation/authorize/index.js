@@ -9,21 +9,21 @@ import { randomNumber } from 'setup/helpers/utils'
 import { ValidationError } from 'modules/common/errors'
 import User from 'modules/user/model'
 import authResponse from 'modules/user/query/authResponse'
-import facebook from './facebook'
+// import facebook from './facebook'
 import google from './google'
-import instagram from './instagram'
-import linkedin from './linkedin'
-import twitter from './twitter'
-import reddit from './reddit'
-import discord from './discord'
-import zoom from './zoom'
-import github from './github'
-import gitlab from './gitlab'
-import digitalocean from './digitalocean'
-import bitbucket from './bitbucket'
+// import instagram from './instagram'
+// import linkedin from './linkedin'
+// import twitter from './twitter'
+// import reddit from './reddit'
+// import discord from './discord'
+// import zoom from './zoom'
+// import github from './github'
+// import gitlab from './gitlab'
+// import digitalocean from './digitalocean'
+// import bitbucket from './bitbucket'
 import azure from './azure'
-import spotify from './spotify'
-import shopify from './shopify'
+// import spotify from './spotify'
+// import shopify from './shopify'
 
 // authorize
 export default async function authorize({ params: { code, state } }) {
@@ -59,80 +59,80 @@ export default async function authorize({ params: { code, state } }) {
 
     // get user details from the platform
     switch (state) {
-      // facebook
-      case params.user.oauth.providers.facebook.key:
-        userProvider = await facebook({ code })
-        break
+      // // facebook
+      // case params.user.oauth.providers.facebook.key:
+      //   userProvider = await facebook({ code })
+      //   break
 
       // google
       case params.user.oauth.providers.google.key:
         userProvider = await google({ code })
         break
 
-      // instagram
-      case params.user.oauth.providers.instagram.key:
-        userProvider = await instagram({ code })
-        break
+      // // instagram
+      // case params.user.oauth.providers.instagram.key:
+      //   userProvider = await instagram({ code })
+      //   break
 
-      // linkedin
-      case params.user.oauth.providers.linkedin.key:
-        userProvider = await linkedin({ code })
-        break
+      // // linkedin
+      // case params.user.oauth.providers.linkedin.key:
+      //   userProvider = await linkedin({ code })
+      //   break
 
-      // twitter
-      case params.user.oauth.providers.twitter.key:
-        userProvider = await twitter({ code })
-        break
+      // // twitter
+      // case params.user.oauth.providers.twitter.key:
+      //   userProvider = await twitter({ code })
+      //   break
 
-      // reddit
-      case params.user.oauth.providers.reddit.key:
-        userProvider = await reddit({ code })
-        break
+      // // reddit
+      // case params.user.oauth.providers.reddit.key:
+      //   userProvider = await reddit({ code })
+      //   break
 
-      // discord
-      case params.user.oauth.providers.discord.key:
-        userProvider = await discord({ code })
-        break
+      // // discord
+      // case params.user.oauth.providers.discord.key:
+      //   userProvider = await discord({ code })
+      //   break
 
-      // zoom
-      case params.user.oauth.providers.zoom.key:
-        userProvider = await zoom({ code })
-        break
+      // // zoom
+      // case params.user.oauth.providers.zoom.key:
+      //   userProvider = await zoom({ code })
+      //   break
 
-      // github
-      case params.user.oauth.providers.github.key:
-        userProvider = await github({ code })
-        break
+      // // github
+      // case params.user.oauth.providers.github.key:
+      //   userProvider = await github({ code })
+      //   break
 
-      // gitlab
-      case params.user.oauth.providers.gitlab.key:
-        userProvider = await gitlab({ code })
-        break
+      // // gitlab
+      // case params.user.oauth.providers.gitlab.key:
+      //   userProvider = await gitlab({ code })
+      //   break
 
-      // digitalocean
-      case params.user.oauth.providers.digitalocean.key:
-        userProvider = await digitalocean({ code })
-        break
+      // // digitalocean
+      // case params.user.oauth.providers.digitalocean.key:
+      //   userProvider = await digitalocean({ code })
+      //   break
 
-      // bitbucket
-      case params.user.oauth.providers.bitbucket.key:
-        userProvider = await bitbucket({ code })
-        break
+      // // bitbucket
+      // case params.user.oauth.providers.bitbucket.key:
+      //   userProvider = await bitbucket({ code })
+      //   break
 
       // azure
       case params.user.oauth.providers.azure.key:
         userProvider = await azure({ code })
         break
 
-      // spotify
-      case params.user.oauth.providers.spotify.key:
-        userProvider = await spotify({ code })
-        break
+      // // spotify
+      // case params.user.oauth.providers.spotify.key:
+      //   userProvider = await spotify({ code })
+      //   break
 
-      // shopify
-      case params.user.oauth.providers.shopify.key:
-        userProvider = await shopify({ code })
-        break
+      // // shopify
+      // case params.user.oauth.providers.shopify.key:
+      //   userProvider = await shopify({ code })
+      //   break
     }
 
     if (userProvider) {
@@ -141,14 +141,20 @@ export default async function authorize({ params: { code, state } }) {
 
       // create new user
       if (!user) {
-        // create new password
-        const password = randomNumber(100000, 999999)
+        // TODO: create new password
+        // const password = randomNumber(100000, 999999)
 
         // User - create
         user = await User.create({
           email: userProvider.email,
           name: userProvider.name,
-          password: await bcrypt.hash(`${password}`, SECURITY_SALT_ROUNDS),
+          token: userProvider.token,
+          // password: await bcrypt.hash(`${password}`, SECURITY_SALT_ROUNDS),
+        })
+      } else {
+        // User - update
+        user = await User.findByIdAndUpdate(user._id, {
+          token: userProvider.token,
         })
       }
 

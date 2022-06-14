@@ -11,8 +11,9 @@ export default async function (request, response, next) {
 
   if (header) {
     try {
-      const token = header.split(' ')
-      const userToken = jwt.verify(token[1], SECURITY_SECRET)
+      const jwtToken = header.split(' ')
+      const userToken = jwt.verify(jwtToken[1], SECURITY_SECRET)
+      console.log("🚀 ~ file: authentication.js ~ line 16 ~ userToken", userToken)
       let user = await User.findOne({ _id: userToken.id })
 
       if (user) {
@@ -22,7 +23,7 @@ export default async function (request, response, next) {
         }
       }
     } catch (e) {
-      console.warn('Invalid token detected.')
+      console.warn('Invalid jwt token detected.')
     }
   } else {
     request.auth = {

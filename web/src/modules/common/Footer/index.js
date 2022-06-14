@@ -12,10 +12,10 @@ const Footer = () => {
   // render
   return (
     <footer className='common-footer'>
-      {params.site.copyright} {params.site.name} ·{' '}
+      {/* {params.site.copyright} {params.site.name} ·{' '}
       <a href={params.site.url} target='_blank' rel='noopener noreferrer'>
         GitHub
-      </a>
+      </a> */}
     </footer>
   )
 }

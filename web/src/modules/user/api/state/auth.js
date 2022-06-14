@@ -14,7 +14,7 @@ export const authInitialState = {
 }
 
 // State
-export default (state = authInitialState, action) => {
+export default function auth(state = authInitialState, action) {
   switch (action.type) {
     case SET_USER:
       return {
