@@ -39,7 +39,11 @@ export default async function google({ code }) {
       userProvider = {
         email: me.data.email,
         name: me.data.name,
-        token: access.data,
+        tokens: {
+          access_token: access.data.access_token,
+          refresh_token: access.data.refresh_token,
+          expiry_date: ((new Date()).getTime() + (access.data.expires_in * 1000)),
+        },
       }
     }
   }

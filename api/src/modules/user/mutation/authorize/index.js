@@ -146,9 +146,7 @@ export default async function authorize({ params: { code, state } }) {
 
         // User - create
         user = await User.create({
-          email: userProvider.email,
-          name: userProvider.name,
-          token: userProvider.token,
+          ...userProvider,
           // password: await bcrypt.hash(`${password}`, SECURITY_SALT_ROUNDS),
         })
       } else {
