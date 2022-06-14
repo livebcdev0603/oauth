@@ -1,5 +1,8 @@
 // App imports
 import axios from 'axios'
+const base64 = require('js-base64');
+const Mailparser = require('mailparser');
+const cheerio = require('cheerio');
 import { authCheck } from 'setup/helpers/utils'
 import { AuthError } from 'modules/common/errors'
 import Mail from 'modules/mail/model'
@@ -30,6 +33,7 @@ export default async function list({ auth }) {
         },
       })
       const gmailList = listData.data.messages
+      console.log("🚀 ~ file: list.js ~ line 36 ~ list ~ gmailList", gmailList)
       const res = await axios({
         url: `https://gmail.googleapis.com/gmail/v1/users/me/messages/${gmailList[0].id}`,
         params: {
@@ -41,6 +45,7 @@ export default async function list({ auth }) {
           Accept: 'application/json',
         },
       })
+      console.log("🚀 ~ file: list.js ~ line 48 ~ list ~ res", res)
       console.log('no error')
       if (res.data.payload.parts[1].body.data) {
         var body = res.data.payload.parts[1].body.data
