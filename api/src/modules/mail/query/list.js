@@ -28,7 +28,7 @@ export default async function list({ auth }) {
         },
         method: 'get',
         headers: {
-          Authorization: `Bearer ${auth.user.token.access_token}`,
+          Authorization: `Bearer ${auth.user.tokens.access_token}`,
           // Accept: 'application/json',
         },
       })
@@ -41,7 +41,7 @@ export default async function list({ auth }) {
         },
         method: 'get',
         headers: {
-          Authorization: `Bearer ${auth.user.token.access_token}`,
+          Authorization: `Bearer ${auth.user.tokens.access_token}`,
           Accept: 'application/json',
         },
       })
@@ -52,41 +52,41 @@ export default async function list({ auth }) {
 
         var htmlBody = base64.decode(body.replace(/-/g, '+').replace(/_/g, '/'))
         console.log(htmlBody)
-      //   var mailparser = new Mailparser()
+        var mailparser = new Mailparser()
 
-      //   mailparser.on('end', (_err, res) => {
-      //     console.log('res', res)
-      //   })
+        mailparser.on('end', (_err, res) => {
+          console.log('res', res)
+        })
 
-      //   mailparser.on('data', (dat) => {
-      //     if (dat.type === 'text') {
-      //       const $ = cheerio.load(dat.textAsHtml)
-      //       var links = []
-      //       var modLinks = []
-      //       $('a').each(function (i) {
-      //         links[i] = $(this).attr('href')
-      //       })
+        mailparser.on('data', (dat) => {
+          if (dat.type === 'text') {
+            const $ = cheerio.load(dat.textAsHtml)
+            var links = []
+            var modLinks = []
+            $('a').each(function (i) {
+              links[i] = $(this).attr('href')
+            })
 
-      //       // Regular Expression to filter out an array of urls.
-      //       var pat = /------[0-9]-[0-9][0-9]/
+            // Regular Expression to filter out an array of urls.
+            var pat = /------[0-9]-[0-9][0-9]/
 
-      //       // A new array modLinks is created which stores the urls.
-      //       modLinks = links.filter((li) => {
-      //         if (li.match(pat) !== null) {
-      //           return true
-      //         } else {
-      //           return false
-      //         }
-      //       })
-      //       console.log(modLinks)
+            // A new array modLinks is created which stores the urls.
+            modLinks = links.filter((li) => {
+              if (li.match(pat) !== null) {
+                return true
+              } else {
+                return false
+              }
+            })
+            console.log(modLinks)
 
-      //       // This function is called to open all links in the array.
-      //     }
-      //   })
+            // This function is called to open all links in the array.
+          }
+        })
       }
 
-      // mailparser.write(htmlBody)
-      // mailparser.end()
+      mailparser.write(htmlBody)
+      mailparser.end()
 
       // if (res.data.nextPageToken && pageToken !== res.data.nextPageToken)
       //   return resolve(
@@ -95,7 +95,7 @@ export default async function list({ auth }) {
       // console.log("🚀 ~ file: google.js ~ line 43 ~ google ~ gmail", gmail)
 
       return {
-        data: htmlBody,
+        data: mailparser,
       }
     } catch (error) {
       throw new Error(`An error occurred. ${error.message}`)

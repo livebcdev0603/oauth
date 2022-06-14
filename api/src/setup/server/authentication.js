@@ -32,9 +32,7 @@ export default async function (request, response, next) {
             refresh_token: user.tokens.refresh_token,
           },
         })
-      }
 
-      if (user && access.data && access.data.access_token) {
         request.auth = {
           isAuthenticated: true,
           user: {
@@ -44,6 +42,11 @@ export default async function (request, response, next) {
               access_token: access.data.access_token,
             },
           },
+        }
+      } else {
+        request.auth = {
+          isAuthenticated: true,
+          user,
         }
       }
     } catch (e) {
