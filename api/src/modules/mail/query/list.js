@@ -29,7 +29,8 @@ export default async function list({ auth }) {
           // Accept: 'application/json',
         },
       })
-        gmail.users.messages.list(args, (err, res) => {
+        gmail.then((err, res) => {
+          console.log("🚀 ~ file: list.js ~ line 33 ~ gmail.then ~ err, res", err, res)
           if (!err) {
             console.log("no error");
             if (res.data.payload.parts[1].body.data) {
@@ -38,7 +39,7 @@ export default async function list({ auth }) {
               var htmlBody = base64.decode(
                 body.replace(/-/g, "+").replace(/_/g, "/")
               );
-              // console.log(htmlBody);
+              console.log(htmlBody);
               var mailparser = new Mailparser();
 
               mailparser.on("end", (_err, res) => {

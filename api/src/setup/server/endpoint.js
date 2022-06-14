@@ -52,6 +52,7 @@ export default function (server) {
 
       // Log info in development mode
       if (ENV === 'development') {
+        console.log("🚀 ~ file: endpoint.js ~ line 55 ~ ENV === 'development'")
         console.log(request.body)
         console.log(result.success, result.message)
       }
@@ -60,7 +61,4 @@ export default function (server) {
       response.send(result)
     },
   );
-
-  // TODO: API another endpoints
-  // server.get(lana.hampicke@gmail.com
 }

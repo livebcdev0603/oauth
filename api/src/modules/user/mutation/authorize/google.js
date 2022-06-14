@@ -22,7 +22,7 @@ export default async function google({ code }) {
       code,
     },
   })
-  console.log("🚀 ~ file: google.js ~ line 24 ~ google ~ access", access.data)
+  // console.log("🚀 ~ file: google.js ~ line 24 ~ google ~ access", access.data)
 
   // 2. get user details
   if (access.data && access.data.access_token) {
@@ -32,6 +32,7 @@ export default async function google({ code }) {
       headers: {
         Authorization: `Bearer ${access.data.access_token}`,
       },
+      // responseType: 'json',
     })
 
     if (me.data && me.data.id) {
