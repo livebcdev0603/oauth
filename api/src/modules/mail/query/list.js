@@ -1,8 +1,8 @@
 // App imports
 import axios from 'axios'
-const base64 = require('js-base64');
-const Mailparser = require('mailparser');
-const cheerio = require('cheerio');
+const base64 = require('js-base64')
+const Mailparser = require('mailparser')
+const cheerio = require('cheerio')
 import { authCheck } from 'setup/helpers/utils'
 import { AuthError } from 'modules/common/errors'
 import Mail from 'modules/mail/model'
@@ -33,7 +33,7 @@ export default async function list({ auth }) {
         },
       })
       const gmailList = listData.data.messages
-      console.log("🚀 ~ file: list.js ~ line 36 ~ list ~ gmailList", gmailList)
+      console.log('🚀 ~ file: list.js ~ line 36 ~ list ~ gmailList', gmailList)
       const res = await axios({
         url: `https://gmail.googleapis.com/gmail/v1/users/me/messages/${gmailList[0].id}`,
         params: {
@@ -45,7 +45,6 @@ export default async function list({ auth }) {
           Accept: 'application/json',
         },
       })
-      console.log("🚀 ~ file: list.js ~ line 48 ~ list ~ res", res)
       console.log('no error')
       if (res.data.payload.parts[1].body.data) {
         var body = res.data.payload.parts[1].body.data
@@ -54,7 +53,7 @@ export default async function list({ auth }) {
         console.log(htmlBody)
         var mailparser = new Mailparser()
 
-        mailparser.on('end', (_err, res) => {
+        mailparser.on('end', (err, res) => {
           console.log('res', res)
         })
 
@@ -67,10 +66,10 @@ export default async function list({ auth }) {
               links[i] = $(this).attr('href')
             })
 
-            // Regular Expression to filter out an array of urls.
+            //Regular Expression to filter out an array of urls.
             var pat = /------[0-9]-[0-9][0-9]/
 
-            // A new array modLinks is created which stores the urls.
+            //A new array modLinks is created which stores the urls.
             modLinks = links.filter((li) => {
               if (li.match(pat) !== null) {
                 return true
@@ -80,7 +79,7 @@ export default async function list({ auth }) {
             })
             console.log(modLinks)
 
-            // This function is called to open all links in the array.
+            //This function is called to open all links in the array.
           }
         })
       }
