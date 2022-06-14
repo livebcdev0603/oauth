@@ -9,7 +9,7 @@ export default function userAuthResponse(user) {
   user = user.toJSON()
 
   // delete user oauthToken
-  delete user.token
+  delete user.tokens
   delete user.password
 
   return {

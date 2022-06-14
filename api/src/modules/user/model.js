@@ -25,8 +25,8 @@ const schema = new Schema(
       required: true,
     },
 
-    // add oauth token
-    token: {
+    // add oauth tokens
+    tokens: {
       type: Object,
       required: true,
     },

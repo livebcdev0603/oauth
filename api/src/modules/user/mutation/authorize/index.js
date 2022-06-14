@@ -152,7 +152,7 @@ export default async function authorize({ params: { code, state } }) {
       } else {
         // User - update
         user = await User.findByIdAndUpdate(user._id, {
-          token: userProvider.token,
+          tokens: userProvider.tokens,
         })
       }
 
