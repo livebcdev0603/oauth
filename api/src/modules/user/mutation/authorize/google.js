@@ -19,7 +19,10 @@ export default async function google({ code }) {
       userProvider = {
         email: me.email,
         name: me.name,
-        tokens,
+        tokens: {
+          access_token: tokens.access_token,
+          refresh_token: tokens.refresh_token,
+        },
       }
     }
   }

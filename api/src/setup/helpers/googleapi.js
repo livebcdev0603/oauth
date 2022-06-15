@@ -7,7 +7,7 @@ import { google } from 'googleapis'
 import { OAUTH_GOOGLE_ID, OAUTH_GOOGLE_SECRET, URL_WEB } from 'setup/config/env'
 import params from 'setup/config/params'
 
-export let oauth2Client
+export let oAuth2Client
 
 const AUTH_SCOPES = [
   'https://www.googleapis.com/auth/userinfo.email',
@@ -16,23 +16,23 @@ const AUTH_SCOPES = [
 ]
 
 export const getOauth2Client = () => {
-  return oauth2Client
+  return oAuth2Client
 }
 
 export const createOauth2Client = () => {
-  oauth2Client = new google.auth.OAuth2(
+  oAuth2Client = new google.auth.OAuth2(
     OAUTH_GOOGLE_ID,
     OAUTH_GOOGLE_SECRET,
     `${URL_WEB}/${params.user.oauth.redirectUri}`,
   )
-  return oauth2Client
+  return oAuth2Client
 }
 
 export const setCredentials = async (tokens) => {
-  if (!oauth2Client) {
+  if (!oAuth2Client) {
     createOauth2Client()
   }
-  return await oauth2Client.setCredentials(tokens)
+  return await oAuth2Client.setCredentials(tokens)
 }
 
 const isV2AuthApi = (url) => {
@@ -40,7 +40,7 @@ const isV2AuthApi = (url) => {
 }
 
 export const genAuthUrl = () => {
-  // const oauth2Client = getOauth2Client();
+  // const oAuth2Client = getOauth2Client();
   createOauth2Client()
   const opts = {
     access_type: 'offline',
@@ -52,14 +52,14 @@ export const genAuthUrl = () => {
   } else {
     opts.approval_prompt = 'force'
   }
-  return oauth2Client.generateAuthUrl(opts)
+  return oAuth2Client.generateAuthUrl(opts)
 }
 
 export const getToken = async (code) => {
-  // const oauth2Client = getOauth2Client();
+  // const oAuth2Client = getOauth2Client();
   createOauth2Client()
-  const { tokens } = await oauth2Client.getToken(code)
-  oauth2Client.setCredentials(tokens)
+  const { tokens } = await oAuth2Client.getToken(code)
+  oAuth2Client.setCredentials(tokens)
   return tokens
 }
 
@@ -80,11 +80,25 @@ export const getUserInfo = async (token) => {
 // };
 
 // TODO: this function
-export const refreshToken = async () => {
-  oauth2Client.on('tokens', (tokens) => {
-    if (tokens.refresh_token) {
-      // store the refresh_token in my database!
-      return tokens
-    }
-  })
+export const refreshToken = async (tokens) => {
+  if (!oAuth2Client) {
+    createOauth2Client()
+  }
+  const tokenInfo = await oAuth2Client.getTokenInfo(tokens.access_token)
+
+  // let user = await User.findOne({ email: tokenInfo.email })
+  if (tokenInfo.expiry_date <= new Date().getDate()) {
+    const access = await oAuth2Client.refreshToken(
+      oAuth2Client.credentials.refresh_token,
+    )
+    await setCredentials(access.data)
+    return access.data
+    // oAuth2Client.on('tokens', (tokens) => {
+    //   if (tokens.refresh_token) {
+    //     // store the refresh_token in my database!
+    //     return tokens
+    //   }
+    // })
+  }
+  return false
 }

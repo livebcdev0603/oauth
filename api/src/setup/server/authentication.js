@@ -16,32 +16,21 @@ export default async function (request, response, next) {
       const userToken = jwt.verify(jwtToken[1], SECURITY_SECRET)
       let user = await User.findOne({ _id: userToken.id })
 
-      // if (oauth2Client) {
-      await setCredentials(user.tokens)
-      await refreshToken().then(async (tokens) => {
-        console.log(
-          '🚀 ~ file: googleapi.js ~ line 80 ~ oauth2Client.on ~ tokens',
-          tokens,
-        )
-        if (tokens.refresh_token) {
-          // store the refresh_token in my database!
-          user = await User.findByIdAndUpdate(user._id, {
-            tokens,
-          })
-        }
-      })
-      // oauth2Client.on('tokens', async (tokens) => {
-      //   console.log(
-      //     '🚀 ~ file: googleapi.js ~ line 80 ~ oauth2Client.on ~ tokens',
-      //     tokens,
-      //   )
-      //   if (tokens.refresh_token) {
-      //     // store the refresh_token in my database!
-      //     user = await User.findByIdAndUpdate(user._id, {
-      //       tokens,
-      //     })
-      //   }
-      // })
+      const newTokens = await refreshToken(user.tokens)
+      console.log(
+        '🚀 ~ file: googleapi.js ~ line 80 ~ oauth2Client.on ~ newTokens',
+        newTokens,
+      )
+      if (newTokens) {
+        // store the refresh_token in my database!
+        user = await User.findByIdAndUpdate(user._id, {
+          tokens: {
+            refreshToken: newTokens.refresh_token,
+            access_token: newTokens.access_token,
+          },
+        })
+      }
+
       request.auth = {
         isAuthenticated: true,
         user,
