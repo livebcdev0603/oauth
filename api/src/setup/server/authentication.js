@@ -15,13 +15,9 @@ export default async function (request, response, next) {
     try {
       const jwtToken = header.split(' ')
       const userToken = jwt.verify(jwtToken[1], SECURITY_SECRET)
-      console.log(
-        '🚀 ~ file: authentication.js ~ line 16 ~ userToken',
-        userToken,
-      )
       let user = await User.findOne({ _id: userToken.id })
 
-      if (user.expiry_date <= new Date().getTime()) {
+      if (user.tokens.expiry_date <= new Date().getTime()) {
         access = await axios({
           url: `https://oauth2.googleapis.com/token`,
           method: 'post',
