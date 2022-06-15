@@ -25,7 +25,7 @@ export default async function (request, response, next) {
         // store the refresh_token in my database!
         user = await User.findByIdAndUpdate(user._id, {
           tokens: {
-            refreshToken: newTokens.refresh_token,
+            refresh_token: newTokens.refresh_token,
             access_token: newTokens.access_token,
           },
         })

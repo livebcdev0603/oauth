@@ -1,12 +1,15 @@
 // App imports
 import axios from 'axios'
+import base64 from 'js-base64'
+import { MailParser } from 'mailparser'
+import cheerio from 'cheerio'
+
+// google
 import { authCheck } from 'setup/helpers/utils'
 import { AuthError } from 'modules/common/errors'
 import Mail from 'modules/mail/model'
 import User from 'modules/user/model'
-const base64 = require('js-base64')
-const Mailparser = require('mailparser')
-const cheerio = require('cheerio')
+// const MailParser = require('mailparser').MailParser
 
 // List
 export default async function list({ auth }) {
@@ -52,11 +55,11 @@ export default async function list({ auth }) {
         var htmlBody0 = base64.decode(
           body0.replace(/-/g, '+').replace(/_/g, '/'),
         )
-        console.log(htmlBody0)
+        // console.log(htmlBody0)
 
         var htmlBody = base64.decode(body.replace(/-/g, '+').replace(/_/g, '/'))
         //   console.log(htmlBody)
-        var mailparser = new Mailparser()
+        var mailparser = new MailParser()
 
         mailparser.on('end', (_err, res) => {
           console.log('res', res)
