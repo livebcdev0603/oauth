@@ -25,6 +25,7 @@ export const createOauth2Client = () => {
     OAUTH_GOOGLE_SECRET,
     `${URL_WEB}/${params.user.oauth.redirectUri}`,
   )
+  return oauth2Client
 }
 
 const isV2AuthApi = (url) => {

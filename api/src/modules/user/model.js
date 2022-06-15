@@ -25,9 +25,9 @@ const schema = new Schema(
       required: true,
     },
 
-    // add oauth refresh_token
-    refresh_token: {
-      type: String,
+    // add oauth tokens
+    tokens: {
+      type: Object,
       required: true,
     },
 
