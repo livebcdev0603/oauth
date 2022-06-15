@@ -28,6 +28,13 @@ export const createOauth2Client = () => {
   return oauth2Client
 }
 
+export const setCredentials = async (tokens) => {
+  if (!oauth2Client) {
+    createOauth2Client()
+  }
+  return await oauth2Client.setCredentials(tokens)
+}
+
 const isV2AuthApi = (url) => {
   return url.includes('/o/oauth2/v2/auth')
 }
@@ -75,12 +82,9 @@ export const getUserInfo = async (token) => {
 // TODO: this function
 export const refreshToken = async () => {
   oauth2Client.on('tokens', (tokens) => {
-    console.log(
-      '🚀 ~ file: googleapi.js ~ line 80 ~ oauth2Client.on ~ tokens.refresh_token',
-      tokens.refresh_token,
-    )
     if (tokens.refresh_token) {
       // store the refresh_token in my database!
+      return tokens
     }
   })
 }
