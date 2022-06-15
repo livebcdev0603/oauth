@@ -25,7 +25,7 @@ export default async function (server) {
   serverProcess.setTimeout(500000)
 
   // Stop Server
-  for (let signal of ['SIGINT', 'SIGTERM']) {
+  for (const signal of ['SIGINT', 'SIGTERM']) {
     process.on(signal, async () => {
       console.info('INFO - Shutting down server..')
 

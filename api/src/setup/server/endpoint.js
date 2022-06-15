@@ -13,7 +13,7 @@ export default function (server) {
     params.common.endpoint.url,
     [authentication],
     async (request, response) => {
-      let result = {
+      const result = {
         success: false,
         message: 'Please try again.',
         code: 'default',
@@ -21,7 +21,7 @@ export default function (server) {
       }
 
       // Check if operation to be called is set
-      let operation =
+      const operation =
         modules[request.body.operation] || modules[request.params.operation]
 
       if (operation) {
@@ -60,5 +60,5 @@ export default function (server) {
       // Send response
       response.send(result)
     },
-  );
+  )
 }

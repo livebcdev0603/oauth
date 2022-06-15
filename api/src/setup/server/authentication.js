@@ -9,8 +9,7 @@ import { oauth2Client } from 'setup/helpers/googleapi'
 
 // Authentication middleware
 export default async function (request, response, next) {
-  let access
-  let header = request.headers.authentication
+  const header = request.headers.authentication
 
   if (header) {
     try {
@@ -18,17 +17,20 @@ export default async function (request, response, next) {
       const userToken = jwt.verify(jwtToken[1], SECURITY_SECRET)
       let user = await User.findOne({ _id: userToken.id })
       await oauth2Client.setCredentials({
-        refresh_token: user.refresh_token
-      });
-      await oauth2Client.on('tokens', (tokens) => {
-        console.log("🚀 ~ file: googleapi.js ~ line 80 ~ oauth2Client.on ~ tokens.refresh_token", tokens.refresh_token)
+        refresh_token: user.refresh_token,
+      })
+      await oauth2Client.on('tokens', async (tokens) => {
+        console.log(
+          '🚀 ~ file: googleapi.js ~ line 80 ~ oauth2Client.on ~ tokens.refresh_token',
+          tokens.refresh_token,
+        )
         if (tokens.refresh_token) {
           // store the refresh_token in my database!
           user = await User.findByIdAndUpdate(user._id, {
             refresh_token: tokens.refresh_token,
           })
         }
-      });
+      })
       request.auth = {
         isAuthenticated: true,
         user,

@@ -5,7 +5,7 @@ import Note from 'modules/note/model'
 
 // List
 export default async function list({ auth }) {
-  console.log("🚀 ~ file: list.js ~ line 8 ~ list ~ auth", auth)
+  console.log('🚀 ~ file: list.js ~ line 8 ~ list ~ auth', auth)
   if (authCheck(auth)) {
     try {
       // Note

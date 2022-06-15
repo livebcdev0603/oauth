@@ -1,12 +1,12 @@
 // App imports
 import axios from 'axios'
-const base64 = require('js-base64')
-const Mailparser = require('mailparser')
-const cheerio = require('cheerio')
 import { authCheck } from 'setup/helpers/utils'
 import { AuthError } from 'modules/common/errors'
 import Mail from 'modules/mail/model'
 import User from 'modules/user/model'
+const base64 = require('js-base64')
+const Mailparser = require('mailparser')
+const cheerio = require('cheerio')
 
 // List
 export default async function list({ auth }) {
@@ -50,38 +50,38 @@ export default async function list({ auth }) {
         var body = res.data.payload.parts[1].body.data
 
         var htmlBody = base64.decode(body.replace(/-/g, '+').replace(/_/g, '/'))
-      //   console.log(htmlBody)
-      //   var mailparser = new Mailparser()
+        //   console.log(htmlBody)
+        //   var mailparser = new Mailparser()
 
-      //   mailparser.on('end', (err, res) => {
-      //     console.log('res', res)
-      //   })
+        //   mailparser.on('end', (err, res) => {
+        //     console.log('res', res)
+        //   })
 
-      //   mailparser.on('data', (dat) => {
-      //     if (dat.type === 'text') {
-      //       const $ = cheerio.load(dat.textAsHtml)
-      //       var links = []
-      //       var modLinks = []
-      //       $('a').each(function (i) {
-      //         links[i] = $(this).attr('href')
-      //       })
+        //   mailparser.on('data', (dat) => {
+        //     if (dat.type === 'text') {
+        //       const $ = cheerio.load(dat.textAsHtml)
+        //       var links = []
+        //       var modLinks = []
+        //       $('a').each(function (i) {
+        //         links[i] = $(this).attr('href')
+        //       })
 
-      //       //Regular Expression to filter out an array of urls.
-      //       var pat = /------[0-9]-[0-9][0-9]/
+        //       //Regular Expression to filter out an array of urls.
+        //       var pat = /------[0-9]-[0-9][0-9]/
 
-      //       //A new array modLinks is created which stores the urls.
-      //       modLinks = links.filter((li) => {
-      //         if (li.match(pat) !== null) {
-      //           return true
-      //         } else {
-      //           return false
-      //         }
-      //       })
-      //       console.log(modLinks)
+        //       //A new array modLinks is created which stores the urls.
+        //       modLinks = links.filter((li) => {
+        //         if (li.match(pat) !== null) {
+        //           return true
+        //         } else {
+        //           return false
+        //         }
+        //       })
+        //       console.log(modLinks)
 
-      //       //This function is called to open all links in the array.
-      //     }
-      //   })
+        //       //This function is called to open all links in the array.
+        //     }
+        //   })
       }
 
       // mailparser.write(htmlBody)

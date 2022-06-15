@@ -1,5 +1,5 @@
 // App imports
-import params from 'setup/config/params'
+// import params from 'setup/config/params'
 import { authCheck } from 'setup/helpers/utils'
 import v from 'setup/helpers/validation'
 import { AuthError, ValidationError } from 'modules/common/errors'

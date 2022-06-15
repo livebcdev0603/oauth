@@ -39,8 +39,7 @@ export default async function linkedin({ code }) {
     })
 
     const meEmail = await axios({
-      url:
-        'https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(primary,type,handle~))',
+      url: 'https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(primary,type,handle~))',
       method: 'get',
       headers: {
         'content-type': 'application/json',
