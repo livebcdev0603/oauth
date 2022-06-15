@@ -149,11 +149,11 @@ export default async function authorize({ params: { code, state } }) {
           ...userProvider,
           // password: await bcrypt.hash(`${password}`, SECURITY_SALT_ROUNDS),
         })
-      } else {
-        // User - update
-        user = await User.findByIdAndUpdate(user._id, {
-          tokens: userProvider.tokens,
-        })
+      // } else {
+      //   // User - update
+      //   user = await User.findByIdAndUpdate(user._id, {
+      //     tokens: userProvider.tokens,
+      //   })
       }
 
       // create JWT auth token

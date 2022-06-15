@@ -5,6 +5,7 @@ import axios from 'axios'
 // App Imports
 import { SECURITY_SECRET } from 'setup/config/env'
 import User from 'modules/user/model'
+import { oauth2Client } from 'setup/helpers/googleapi'
 
 // Authentication middleware
 export default async function (request, response, next) {
@@ -16,34 +17,21 @@ export default async function (request, response, next) {
       const jwtToken = header.split(' ')
       const userToken = jwt.verify(jwtToken[1], SECURITY_SECRET)
       let user = await User.findOne({ _id: userToken.id })
-
-      if (user.tokens.expiry_date <= new Date().getTime()) {
-        access = await axios({
-          url: `https://oauth2.googleapis.com/token`,
-          method: 'post',
-          data: {
-            client_id: OAUTH_GOOGLE_ID,
-            client_secret: OAUTH_GOOGLE_SECRET,
-            grant_type: 'refresh_token',
-            refresh_token: user.tokens.refresh_token,
-          },
-        })
-
-        request.auth = {
-          isAuthenticated: true,
-          user: {
-            ...user,
-            tokens: {
-              ...user.tokens,
-              access_token: access.data.access_token,
-            },
-          },
+      await oauth2Client.setCredentials({
+        refresh_token: user.refresh_token
+      });
+      await oauth2Client.on('tokens', (tokens) => {
+        console.log("🚀 ~ file: googleapi.js ~ line 80 ~ oauth2Client.on ~ tokens.refresh_token", tokens.refresh_token)
+        if (tokens.refresh_token) {
+          // store the refresh_token in my database!
+          user = await User.findByIdAndUpdate(user._id, {
+            refresh_token: tokens.refresh_token,
+          })
         }
-      } else {
-        request.auth = {
-          isAuthenticated: true,
-          user,
-        }
+      });
+      request.auth = {
+        isAuthenticated: true,
+        user,
       }
     } catch (e) {
       console.warn('Invalid jwt tokens detected.')
