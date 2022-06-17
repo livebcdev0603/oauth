@@ -4,6 +4,7 @@ import PagesAuthorize from 'modules/pages/Authorize'
 import UserDashboard from 'modules/user/Dashboard'
 import UserProfile from 'modules/user/Profile'
 import NoteList from 'modules/note/List'
+import MailList from 'modules/mail/List'
 
 // Combined routes
 const routes = {
@@ -38,6 +39,13 @@ const routes = {
   noteList: {
     path: '/notes',
     component: NoteList,
+    auth: true,
+  },
+  
+  // note list
+  mailList: {
+    path: '/mails',
+    component: MailList,
     auth: true,
   },
 }

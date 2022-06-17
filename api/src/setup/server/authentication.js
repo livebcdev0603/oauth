@@ -4,25 +4,39 @@ import jwt from 'jsonwebtoken'
 // App Imports
 import { SECURITY_SECRET } from 'setup/config/env'
 import User from 'modules/user/model'
+import { setCredentials, refreshToken } from 'setup/helpers/googleapi'
 
 // Authentication middleware
 export default async function (request, response, next) {
-  let header = request.headers.authentication
+  const header = request.headers.authentication
 
   if (header) {
     try {
-      const token = header.split(' ')
-      const userToken = jwt.verify(token[1], SECURITY_SECRET)
+      const jwtToken = header.split(' ')
+      const userToken = jwt.verify(jwtToken[1], SECURITY_SECRET)
       let user = await User.findOne({ _id: userToken.id })
 
-      if (user) {
-        request.auth = {
-          isAuthenticated: true,
-          user,
-        }
+      const newTokens = await refreshToken(user.tokens)
+      console.log(
+        '🚀 ~ file: googleapi.js ~ line 80 ~ oauth2Client.on ~ newTokens',
+        newTokens,
+      )
+      if (newTokens) {
+        // store the refresh_token in my database!
+        user = await User.findByIdAndUpdate(user._id, {
+          tokens: {
+            refresh_token: user.tokens.refresh_token,
+            access_token: newTokens.access_token,
+          },
+        })
       }
-    } catch (e) {
-      console.warn('Invalid token detected.')
+
+      request.auth = {
+        isAuthenticated: true,
+        user,
+      }
+    } catch (err) {
+      console.warn('Invalid jwt tokens detected.', err)
     }
   } else {
     request.auth = {

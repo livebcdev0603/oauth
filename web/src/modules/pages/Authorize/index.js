@@ -38,12 +38,12 @@ const Authorize = ({ history, location }) => {
         const { data } = await authorize(query)
 
         if (data && data.success && data.data) {
-          const token = data.data.token
+          const jwtToken = data.data.jwtToken
           const user = data.data.user
 
-          dispatch(loginSetUser(token, user))
+          dispatch(loginSetUser(jwtToken, user))
 
-          loginSetUserLocalStorage(token, user)
+          loginSetUserLocalStorage(jwtToken, user)
 
           redirectTo = routes.userDashboard.path
         }

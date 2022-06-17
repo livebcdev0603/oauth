@@ -1,6 +1,6 @@
-// Unset user token and info in localStorage and cookie
+// Unset user jwtToken and info in localStorage and cookie
 export default function logoutUnsetUserLocalStorage() {
-  // Remove token
-  window.localStorage.removeItem('token')
+  // Remove jwtToken
+  window.localStorage.removeItem('jwtToken')
   window.localStorage.removeItem('user')
 }

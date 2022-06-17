@@ -1,19 +1,18 @@
 // App imports
-// import params from 'setup/config/params'
 import { authCheck } from 'setup/helpers/utils'
 import v from 'setup/helpers/validation'
 import { AuthError, ValidationError } from 'modules/common/errors'
-import Note from 'modules/note/model'
+import Mail from 'modules/mail/model'
 
-// Save
-export default async function save({ params: { text }, auth }) {
+// Remove
+export default async function remove({ params: { mailId }, auth }) {
   if (authCheck(auth)) {
     // Validation rules
     const rules = [
       {
-        data: { value: text },
-        check: 'isNotEmpty',
-        message: 'Invalid text.',
+        data: { value: mailId },
+        check: 'isNotempty',
+        message: 'Invalid mail.',
       },
     ]
 
@@ -25,17 +24,15 @@ export default async function save({ params: { text }, auth }) {
     }
 
     try {
-      const fields = { userId: auth.user._id, text }
-
-      // Note
-      const data = await Note.create({
-        ...fields,
-        isDeleted: false,
-      })
+      // Mail
+      const data = await Mail.updateOne(
+        { _id: mailId },
+        { $set: { isDeleted: true } },
+      )
 
       return {
         data,
-        message: `Note has been saved successfully.`,
+        message: `Mail has been removed successfully.`,
       }
     } catch (error) {
       throw new Error(`An error occurred. ${error.message}`)

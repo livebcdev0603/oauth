@@ -5,7 +5,7 @@ import axios from 'axios'
 import { LOGOUT } from 'modules/user/api/actions/types'
 import { logoutUnsetUserLocalStorage } from 'modules/user/api/actions/query'
 
-// Log out user and remove token from localStorage
+// Log out user and remove jwtToken from localStorage
 export default function logout() {
   return (dispatch) => {
     logoutUnsetUserLocalStorage()

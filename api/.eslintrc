@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "standard",
+    "prettier"
+  ],
+  "plugins": [
+    "prettier",
+    "promise",
+    "import",
+    "node"
+  ],
+  "rules": {
+    "prettier/prettier": [
+      "warn",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "no-unused-vars": "warn"
+  }
+}

@@ -8,12 +8,12 @@ import modules from './modules'
 export default function (server) {
   console.info('SETUP - Endpoint..')
 
-  // API endpoint
+  // API oauth endpoint
   server.all(
     params.common.endpoint.url,
     [authentication],
     async (request, response) => {
-      let result = {
+      const result = {
         success: false,
         message: 'Please try again.',
         code: 'default',
@@ -21,7 +21,7 @@ export default function (server) {
       }
 
       // Check if operation to be called is set
-      let operation =
+      const operation =
         modules[request.body.operation] || modules[request.params.operation]
 
       if (operation) {
@@ -52,6 +52,7 @@ export default function (server) {
 
       // Log info in development mode
       if (ENV === 'development') {
+        console.log("🚀 ~ file: endpoint.js ~ line 55 ~ ENV === 'development'")
         console.log(request.body)
         console.log(result.success, result.message)
       }

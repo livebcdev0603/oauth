@@ -20,12 +20,12 @@ import {
 import * as serviceWorker from './serviceWorker'
 
 // User Authentication
-const token = window.localStorage.getItem('token')
-if (token && token !== 'undefined' && token !== '') {
+const jwtToken = window.localStorage.getItem('jwtToken')
+if (jwtToken && jwtToken !== 'undefined' && jwtToken !== '') {
   const user = JSON.parse(window.localStorage.getItem('user'))
   if (user) {
-    loginSetUserLocalStorage(token, user)
-    store.dispatch(loginSetUser(token, user))
+    loginSetUserLocalStorage(jwtToken, user)
+    store.dispatch(loginSetUser(jwtToken, user))
   }
 }
 

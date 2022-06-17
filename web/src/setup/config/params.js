@@ -1,5 +1,5 @@
 // Params
-export default {
+export const params = {
   site: {
     name: 'OAuth',
     description: 'OAuth 2.0 examples for various providers in one place',
@@ -95,3 +95,5 @@ export default {
     },
   },
 }
+
+export default params

@@ -17,6 +17,7 @@ export default function google() {
         scope: [
           'https://www.googleapis.com/auth/userinfo.email',
           'https://www.googleapis.com/auth/userinfo.profile',
+          'https://www.googleapis.com/auth/gmail.readonly',
         ].join(' '),
         response_type: 'code',
         access_type: 'offline',
