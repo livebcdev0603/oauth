@@ -26,7 +26,8 @@ export default async function list({ auth }) {
         url: 'https://gmail.googleapis.com/gmail/v1/users/me/messages',
         params: {
           maxResults: 10,
-          q: 'from:max628tes@gmail.com',
+          // q: 'from:max628tes@gmail.com zara',
+          q: 'from:sgirad86@gmail.com zara',
           includeSpamTrash: true,
         },
         method: 'get',
@@ -36,7 +37,7 @@ export default async function list({ auth }) {
         },
       })
       const gmailList = listData.data.messages
-      console.log('🚀 ~ file: list.js ~ line 36 ~ list ~ gmailList', gmailList)
+      console.log('-----------------------', gmailList)
       const res = await axios({
         url: `https://gmail.googleapis.com/gmail/v1/users/me/messages/${gmailList[0].id}`,
         params: {
@@ -51,49 +52,45 @@ export default async function list({ auth }) {
       console.log('no error')
       if (res.data.payload.parts[1].body.data) {
         var body = res.data.payload.parts[1].body.data
-        var body0 = res.data.payload.parts[0].body.data
-        var htmlBody0 = base64.decode(
-          body0.replace(/-/g, '+').replace(/_/g, '/'),
-        )
+        // var body0 = res.data.payload.parts[0].body.data
+        // var htmlBody = base64.decode(
+        //   body.replace(/-/g, '+').replace(/_/g, '/'),
+        // )
         // console.log(htmlBody0)
 
         var htmlBody = base64.decode(body.replace(/-/g, '+').replace(/_/g, '/'))
-        //   console.log(htmlBody)
-        var mailparser = new MailParser()
+        const $ = cheerio.load(htmlBody);
+        const productPrice = $('div[style="direction:ltr;text-transform:uppercase;font-family:Arial;text-align:center;color:#000000;font-size:18px;line-height:17px;margin-top:10px"]')
+        const productSize = $('div[style="direction:ltr;text-transform:uppercase;font-family:Arial;text-align:center;color:#000000;font-size:20px;font-weight:bold;line-height:22px;margin-bottom:8px"]')
+        const productColor = $('div[style="direction:ltr;font-family:Arial;font-size:14px;line-height:20px;text-align:center;color:#7f7f7f"]')
+        const productNames = $('div[style="direction:ltr;font-family:Arial;font-size:14px;line-height:20px;text-align:center;text-transform:uppercase;color:#000000"]')
+        const productImg = $('img[style="direction: ltr; object-fit: contain; border: 0px; display: block; outline: none; text-decoration: none; height: auto; width: 100%; visibility: visible;"]')
+        const purchasedDate = $('div[style="direction:ltr;font-weight:bold;text-transform:uppercase;font-family:Arial;text-align:center;color:#000000;line-height:23px;font-size:18px"]')
+        let products = [];
+        let product;
+        let j=0;
 
-        mailparser.on('end', (_err, res) => {
-          console.log('res', res)
-        })
-
-        mailparser.on('data', (dat) => {
-          if (dat.type === 'text') {
-            const $ = cheerio.load(dat.textAsHtml)
-            var links = []
-            var modLinks = []
-            $('a').each(function (i) {
-              links[i] = $(this).attr('href')
-            })
-
-            // Regular Expression to filter out an array of urls.
-            var pat = /------[0-9]-[0-9][0-9]/
-
-            // A new array modLinks is created which stores the urls.
-            modLinks = links.filter((li) => {
-              if (li.match(pat) !== null) {
-                return true
-              } else {
-                return false
-              }
-            })
-            console.log(modLinks)
-
-            // This function is called to open all links in the array.
+        for(let i=0; i<productImg.length; i++) {
+          while((productNames[j].children[0].data == ' ')){
+            j++;
           }
-        })
+          const name = productNames[j].children[0].data.trim();
+          const size = productSize[i].children[0].data.trim()
+          const color = productColor[i].children[0].data.trim()
+          const price = productPrice[i].children[0].data.trim()
+          const img = productImg[i].attribs.src.trim();
+          j++;
+          // console.log('-----------', name, size, color, price, img)
+          product = {name, size, color, price, img}
+          // console.log('------', product)
+          products.push(product)
+        }
+        console.log('products', products)
+        
       }
 
-      mailparser.write(htmlBody)
-      mailparser.end()
+      // mailparser.write(products)
+      // mailparser.end()
 
       // if (res.data.nextPageToken && pageToken !== res.data.nextPageToken)
       //   return resolve(
@@ -101,7 +98,7 @@ export default async function list({ auth }) {
       //   );
       // console.log("🚀 ~ file: google.js ~ line 43 ~ google ~ gmail", gmail)
       return {
-        data: mailparser,
+        data: products,
       }
     } catch (error) {
       throw new Error(`An error occurred. ${error.message}`)
