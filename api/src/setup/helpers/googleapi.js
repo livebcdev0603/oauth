@@ -81,43 +81,32 @@ export const getUserInfo = async (token) => {
 
 // TODO: this function
 export const refreshToken = async (tokens) => {
-  console.log(
-    '🚀 ~ file: googleapi.js ~ line 84 ~ refreshToken ~ tokens',
-    tokens,
-  )
   // if (!oAuth2Client) {
   //   await createOauth2Client()
   // }
   await setCredentials(tokens)
 
-  try {
-    oAuth2Client.on('tokens', (tokens) => {
-      console.log(
-        '🚀 ~ file: googleapi.js ~ line 95 ~ oAuth2Client.on ~ tokens',
-        tokens,
-      )
-      if (tokens.refresh_token) {
-        // store the refresh_token in my database!
-        return tokens
-      }
-    })
-    const tokenInfo = await oAuth2Client.getTokenInfo(tokens.access_token)
-
-    // // let user = await User.findOne({ email: tokenInfo.email })
-    if (tokenInfo.expiry_date <= new Date().getDate()) {
-      console.log(
-        '🚀 ~ file: googleapi.js ~ line 102 ~ refreshToken ~ tokenInfo',
-        tokenInfo,
-      )
-      const access = await oAuth2Client.refreshToken(tokens.refresh_token)
-      await setCredentials(access.tokens)
-      return access.tokens
+  oAuth2Client.on('tokens', (tokens) => {
+    console.log("🚀 ~ file: googleapi.js ~ line 95 ~ oAuth2Client.on ~ tokens", tokens)
+    if (tokens.refresh_token) {
+      // store the refresh_token in my database!
+      return tokens
     }
-    return false
-  } catch (error) {
-    console.log('🚀 tokenInfo---error', error)
-    const access = await oAuth2Client.refreshToken(tokens.refresh_token)
-    await setCredentials(access.tokens)
-    return access.tokens
-  }
+  })
+  // try {
+  //   const tokenInfo = await oAuth2Client.getTokenInfo(tokens.access_token)
+
+  //   // let user = await User.findOne({ email: tokenInfo.email })
+  //   if (tokenInfo.expiry_date <= new Date().getDate()) {
+  //     const access = await oAuth2Client.refreshToken(tokens.refresh_token)
+  //     await setCredentials(access.tokens)
+  //     return access.tokens
+  //   }
+  //   return false
+  // } catch (error) {
+  //   console.log('🚀 tokenInfo---error', error)
+  //   const access = await oAuth2Client.refreshToken(tokens.refresh_token)
+  //   await setCredentials(access.tokens)
+  //   return access.tokens
+  // }
 }
